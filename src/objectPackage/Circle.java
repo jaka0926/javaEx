@@ -11,6 +11,9 @@ class Circle {
   public int getRadius() {
     return radius;
   }
+  public double getArea() {
+    return (PI * radius * radius);
+  }
   public void setRadius(int radius) {
     if (radius <= 0) {
       System.out.println("원의 반지름이 0보다 커야한다");
@@ -32,6 +35,11 @@ class Circle {
       return;
     }
       double area = PI * radius * radius;
-      System.out.println("원의 넓이 " + area);
+      System.out.printf("원의 넓이 %.2f\n", area);
+  }
+
+  @Override
+  public String toString() {
+    return "Circle's radius is " + radius + " and area is " + getArea();
   }
 }
