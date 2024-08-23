@@ -1,6 +1,6 @@
 package exercise;
 
-public class Line implements Comparable{
+public class Line implements Comparable {
   int length;
   public Line(int length) {
     this.length = length;
@@ -17,7 +17,7 @@ public class Line implements Comparable{
     else if (this.length < ((Line) o).length) {
       return -1;
     }
-    else if (this.length == this.length) {
+    else if (this.length == ((Line) o).length) {
       return 0;
     }
     else { return 99; }
