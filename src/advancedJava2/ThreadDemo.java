@@ -2,10 +2,10 @@ package advancedJava2;
 
 public class ThreadDemo {
   public static void main(String[] args) throws InterruptedException {
-    Thread thread = new Thread(new MyRunnable());
+    Thread thread = new Thread(new MyTask());
     thread.start();
     long before = System.currentTimeMillis();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       System.out.println("This is Main");
       Thread.sleep(500);
     }
@@ -21,11 +21,11 @@ class MyThread extends Thread {
   }
 }
 
-class  MyRunnable implements Runnable {
+class MyTask implements Runnable {
 
   @Override
   public void run() {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       System.out.println("Hi!");
       try {
         Thread.sleep(500);
