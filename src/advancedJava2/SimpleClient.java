@@ -8,7 +8,8 @@ import java.net.Socket;
 public class SimpleClient {
   public static void main(String[] args) {
     try {
-      Socket client = new Socket("localHost", 5000);
+      Socket client = new Socket("localhost", 50001);
+      System.out.println("Client connection success");
       OutputStream os = client.getOutputStream();
       ObjectOutputStream oos = new ObjectOutputStream(os);
       for (int i = 0; i < 3; i++) {

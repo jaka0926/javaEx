@@ -14,7 +14,7 @@ public class SimpleServer {
       Socket conn = server.accept();
       InputStream is = conn.getInputStream();
       ObjectInputStream ois = new ObjectInputStream(is);
-      Object msg = (String) ois.readObject();
+      String msg = (String) ois.readObject();
       System.out.println("Received msg: " + msg);
     }
     catch (Exception e) {
