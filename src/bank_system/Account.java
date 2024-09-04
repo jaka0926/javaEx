@@ -19,10 +19,6 @@ public class Account {
     this.accOpenDate = accOpenDate;
   }
 
-  public double getAccBalance() {
-    return accBalance;
-  }
-
   public void deposit(double amount) {
     accBalance += amount;
   }
