@@ -9,18 +9,29 @@ public class DBDemo4 {
     getPersonInfos(conn);
   }
 
-  public static void getPersonInfos(Connection conn) throws SQLException {
-    String sql = "select * from person where phone = ?;";
+  public static void getPersonInfos(Connection conn) {
     Scanner scanner = new Scanner(System.in);
+    String sql = "select * from person where phone like ?;";
     System.out.print("Enter phone number: ");
     String pNum = scanner.nextLine();
-    PreparedStatement ps = conn.prepareStatement(sql);
-    ps.setString(1, pNum);
-    ResultSet rs = ps.executeQuery();
-    while (rs.next()) {
-      System.out.println(rs.getString(1) + ", " + rs.getString(2) + ", " + rs.getString(3));
+    try {
+      PreparedStatement ps = conn.prepareStatement(sql);
+      ps.setString(1, pNum);
+      ResultSet rs = ps.executeQuery();
+      if (!rs.next()) {
+        System.out.println("No search result");
+      }
+      else {
+        do {
+          System.out.println(rs.getString(1) + ", " + rs.getString(2) + ", " + rs.getString(3));
+        }
+        while (rs.next());
+      }
+      rs.close();
     }
-    rs.close();
+    catch (SQLException e) {
+      System.out.println("SQL error while running");
+    }
   }
 
   public static Connection makeConnection() throws SQLException {
