@@ -11,7 +11,7 @@ public class DBDemo4 {
 
   public static void getPersonInfos(Connection conn) {
     Scanner scanner = new Scanner(System.in);
-    String sql = "select * from person where phone like ?;";
+    String sql = "select * from cafe;";
     System.out.print("Enter phone number: ");
     String pNum = scanner.nextLine();
     try {
@@ -40,7 +40,7 @@ public class DBDemo4 {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
       System.out.println("Database connecting...");
-      conn = DriverManager.getConnection(url, "root", "1234");
+      conn = DriverManager.getConnection(url, "root", "1111");
       System.out.println("Database connection successful");
     }
     catch (ClassNotFoundException e) {
