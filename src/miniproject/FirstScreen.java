@@ -155,7 +155,9 @@ public class FirstScreen {
         else if ((!inputPhone.matches("\\d+"))) {
           JOptionPane.showMessageDialog(mfrm, "핸드폰 번호에 숫자만 입력 가능합니다");
         }
-
+        else if (DataBase.getMemberInfo(conn, inputPhone) != null) {
+         JOptionPane.showMessageDialog(mfrm, "해당 번호가 이미 등록되어 있습니다");
+        }
         else {
           DataBase.addNewMember(conn, inputName, inputPhone);
           JOptionPane.showMessageDialog(mfrm, "회원이 된 것을 축하드립니다. 5000포인트 지급해드렸습니다.");
