@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class FirstScreen {
 
@@ -233,7 +234,7 @@ public class FirstScreen {
 
     // total 라벨
     JLabel totalLabel = new JLabel("TOTAL : 0원");
-    totalLabel.setBounds(50,650,200,50);
+    totalLabel.setBounds(50,650,400,50);
     totalLabel.setFont(new Font("Dialog", Font.BOLD, 20));
 
     // 오더리스트 업데이트 메서드
@@ -321,8 +322,11 @@ public class FirstScreen {
     btn9.setToolTipText("핸드폰번호 입력시 포인트 사용 가능합니다.");
 
     btn9.addActionListener(new ActionListener() {
+      boolean memberInfoExists = false;
+      int availablePointAmt = 0;
       @Override
       public void actionPerformed(ActionEvent e) {
+
         JFrame pointFrame = new JFrame("포인트 사용");
         // 포인트창 사이즈 설정
         pointFrame.setSize(600, 400);
@@ -337,7 +341,7 @@ public class FirstScreen {
 
         // 라벨 생성, 폰트, 위치, 사이즈 설정
         JLabel phoneLabel = new JLabel("핸드폰 번호");
-        JLabel pointLabel = new JLabel("사용 가능한 포인트 : " + "포인트 데이터 입력칸" );
+        JLabel pointLabel = new JLabel();
         phoneLabel.setFont(new Font("Dialog", Font.BOLD, 15));
         pointLabel.setFont(new Font("Dialog", Font.BOLD, 15));
         phoneLabel.setBounds(100, 60, 300, 30);
@@ -372,13 +376,16 @@ public class FirstScreen {
             // pointLabel에 출력
             try {
               conn = DataBase.makeConnection();
-              Object memberInfo = DataBase.getMemberInfo(conn, phoneText.getText());
+              ArrayList<String> memberInfo = DataBase.getMemberInfo(conn, phoneText.getText());
 
               if (memberInfo == null) {
-                System.out.println("PhoneNumber not found");
+                memberInfoExists = false;
+                pointLabel.setText("해당 번호로 등록된 회원 정보가 없습니다");
               }
               else {
-                System.out.println("Points: " + memberInfo.toString());
+                memberInfoExists = true;
+                availablePointAmt = Integer.parseInt(memberInfo.get(1));
+                pointLabel.setText(memberInfo.get(0) + " 회원님의 사용가능한 포인트: " + availablePointAmt);
               }
             } catch (SQLException ex) {
               throw new RuntimeException(ex);
@@ -392,6 +399,25 @@ public class FirstScreen {
           @Override
           public void actionPerformed(ActionEvent e) {
             // pointLabel에 출력된 금액을 mainFrame의 Total에서
+            String text = pointText.getText();
+            int inputPointAmt = (text == null || text.equals("")) ? 0 : Integer.parseInt(text);
+
+            if (!memberInfoExists) {
+              pointLabel.setText("회원 정보를 조회해주세요");
+            }
+            else if (inputPointAmt == 0) {
+              pointLabel.setText("아래칸에 사용하실 포인트 값을 입력해주세요");
+            }
+            else if (inputPointAmt % 1000 != 0) {
+              pointLabel.setText("1000 단위로 입력해주세요");
+            }
+            else if (inputPointAmt > availablePointAmt) {
+              pointLabel.setText("사용 가능한 포인트가 부족합니다");
+            }
+            else {
+              totalLabel.setText(totalLabel.getText() + " -" + inputPointAmt + "원 (포인트)");
+              pointFrame.dispose();
+            }
           }
         });
 
@@ -399,6 +425,8 @@ public class FirstScreen {
         cancelButton.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
+            memberInfoExists = false;
+            availablePointAmt = 0;
             pointFrame.dispose();
           }
         });

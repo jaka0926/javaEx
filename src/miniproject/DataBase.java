@@ -1,6 +1,8 @@
 package miniproject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DataBase {
 
@@ -17,18 +19,23 @@ public class DataBase {
     }
   }
 
-  public static String getMemberInfo(Connection conn, String pNumber) {
-    String sql = "select point from member where p_number = ?;";
-
+  public static ArrayList<String> getMemberInfo(Connection conn, String pNumber) {
+    String sql = "select name, point from member where p_number = ?;";
+    ArrayList<String> result = new ArrayList<>();
     try {
       PreparedStatement ps = conn.prepareStatement(sql);
       ps.setString(1, pNumber);
       ResultSet rs = ps.executeQuery();
 
-      if (rs.next()) {  // Move cursor to the first row
-        return rs.getString(1);  // Get the value of the first column (point)
-      } else return null;
+      if (!rs.next()) {
+        return null;
+      }
 
+      else {  // Move cursor to the first row
+        result.add(rs.getString(1));// Get the value of the first column (point)
+        result.add(rs.getString(2));
+      }
+      return result;
     }
     catch (SQLException e) {
       System.out.println("SQL error while running");
